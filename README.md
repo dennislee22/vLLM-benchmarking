@@ -1,34 +1,39 @@
 # vLLM Benchmarking
 
-- 2 pods hosted on different nodes
+
+## Platform Requirement
+✅ Python 3.11/10
+
+✅ Cloudera AI (CAI) / Cloudera Machine Learning (CML) 1.5.x
+
+## Procedure
+
+1. Create a new CAI project.
+   
+2. Install python libraries.
+  ```
+  pip install vllm torch transformers ipywidgets gradio ray[default] flashinfer-python
+  ```
+
+3. Download the pre-trained LLM into the project of the CAI/CML platform using either `git clone` or `wget`.
+Example:
+  ```
+  git lfs clone https://huggingface.co/Qwen/Qwen2-7B-Instruct
+  ```
+
+4. Create Application to expose vLLM API endpoint. As vLLM utilizes Ray, this application will also host the Ray HEAD and Ray dashboard with 1 GPU device.
+<img width="460" height="730" alt="image" src="https://github.com/user-attachments/assets/d128c611-969d-4e01-9fe4-54a73f9db055" />
+
+5. Start the `vllm-api` application and ensure that the model is fully loaded into the GPU before starting the `gradio-app` application. The code will spawn one Ray HEAD pod along with its associated worker pod within seconds.
 
 ```
-import subprocess, os, time
-import cml.workers_v1 as workers
-
-DASHBOARD_IP = os.environ['CDSW_IP_ADDRESS']
-
-command = "ray start --head --block --include-dashboard=true --dashboard-port=$CDSW_READONLY_PORT --num-cpus=4 --num-gpus=1 &" 
-subprocess.run(command, shell = True, executable="/bin/bash")
-
-with open("RAY_HEAD_IP", 'w') as output_file:
-    output_file.write(DASHBOARD_IP)
-
-ray_head_addr = DASHBOARD_IP + ':6379'
-ray_url = f"ray://{DASHBOARD_IP}:10001" 
-worker_start_cmd = f"!ray start --block --address={ray_head_addr}"
-
-time.sleep(7)
-ray_workers = workers.launch_workers(
-    n=1,
-    cpu=2, 
-    memory=48,
-    nvidia_gpu=1,
-    code=worker_start_cmd,
-)
-
-os.system("vllm serve Qwen2.5-32B-Instruct --port 8081 --tensor-parallel-size 2 --max-model-len 8192 > vllm.log 2>&1 &")
+NAME               READY   STATUS    RESTARTS   AGE     IP             NODE                                          NOMINATED NODE   READINESS GATES
+16nhoob2jp0rc0dr   5/5     Running   0          7m36s   10.42.11.180   ares-ecs-ws-gpu03.ares.olympus.cloudera.com   <none>           <none>
+dhw3fwp551sykyca   5/5     Running   0          7m13s   10.42.9.148    ares-ecs-ws-gpu01.ares.olympus.cloudera.com   <none>           <none>
 ```
+
+✍️ Test 1: 2 GPU pods hosted on 2 different nodes
+
 
 - Results:
 ```
@@ -593,7 +598,11 @@ P99 ITL (ms):                            18.16
 
 ```
 
+- Test 3: 2GPUs on the same host
 
+```
+vllm serve Qwen2-7B-Instruct --port 8081 --tensor-parallel-size 2 --gpu-memory-utilization 0.25 --max-model-len 16384 > vllm.log 2>&1
+```
 
 ```
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
@@ -813,3 +822,13 @@ P99 ITL (ms):                            208.80
 (APIServer pid=1332) INFO 09-02 11:00:55 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 4467.9 tokens/s, Running: 197 reqs, Waiting: 0 reqs, GPU KV cache usage: 89.1%, Prefix cache hit rate: 48.6%
 ```
 
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
+--host localhost \
+--num-prompts 500 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+
+```
