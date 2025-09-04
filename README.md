@@ -2,6 +2,11 @@
 
 These vLLM benchmarking results utilizes a `Qwen-2 7B-Instruct` model running on 2x NVIDIA A100 GPUs using the vLLM inference engine. The key takeaway from the test results is that vLLM's core features, particularly PagedAttention and continuous batching, make the system highly efficient at maximizing GPU utilization. Performance is a dynamic interplay between being compute-bound (limited by the GPU's processing power) and memory-bound (limited by GRAM capacity for the KV Cache).
 
+## Performance Criteria
+
+vLLM stores KV cache (gpu-memory-utilization setting) in the GPU memory up to 0.9 (90% of the total capacity). You may allocate lesser percentage with the constrained GPU memory.
+<img width="1022" height="460" alt="image" src="https://github.com/user-attachments/assets/a4d52f66-7df1-4443-8c0f-69a79abe4832" />
+
 📈 Concurrent Prompts:
 Increasing concurrent prompts initially leads to a rapid increase in total throughput. The system hits a peak performance around 200 concurrent users (~3700 tok/sec). Beyond this point, throughput gradually declines due to the overhead of managing too many requests (compute gridlock). At low concurrency, the GPU is underutilized. Increasing the batch size allows the GPU to process more data in parallel, hiding memory latency and maximizing compute saturation. Once saturated, adding more requests creates scheduling overhead and contention for resources, leading to diminishing returns and eventually a performance drop.
 
