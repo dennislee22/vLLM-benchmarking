@@ -1,6 +1,6 @@
 # vLLM Benchmarking
 
-These vLLM benchmarking results utilizes a `Qwen-2 7B-Instruct` model running on 2x NVIDIA A100 GPUs using the vLLM inference engine. The key takeaway from the test results is that vLLM's core features, particularly PagedAttention and continuous batching, make the system highly efficient at maximizing GPU utilization. Performance is a dynamic interplay between being compute-bound (limited by the GPU's processing power) and memory-bound (limited by GRAM capacity for the KV Cache).
+These vLLM benchmarking results utilizes a `Qwen-2 7B-Instruct` model running on 2x NVIDIA A100 GPUs using the vLLM inference engine. The key takeaway from the test results is that vLLM's core features, particularly PagedAttention and continuous batching, make the system highly efficient at maximizing GPU utilization. Performance is a dynamic interplay between being compute-bound (limited by the GPU's processing power) and memory-bound (limited by VRAM/GRAM capacity for the KV Cache).
 
 ## Performance Criteria
 
