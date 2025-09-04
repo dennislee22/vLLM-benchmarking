@@ -55,10 +55,10 @@ NAME               READY   STATUS    RESTARTS   AGE   IP             NODE       
 ip46y52fijaguyzo   5/5     Running   0          29m   10.254.5.36    worker-20   <none>           <none>
 ```
 
-### <a name="toc_2"></a>✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
+#### <a name="toc_2"></a>✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
 
 - This setup uses Ray alongside `cml.workers_v1 module`. Please see this script [run-vllm.py](run-vllm.py).
-- Startup log: [vllm-7B-2gpuA10040GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10040GB-0.5GRAM-same-node.log)
+- Startup log: [vllm-7B-2gpuA10040GB-0.5GRAM-diff-nodes.log](vllm-7B-2gpuA10040GB-0.5GRAM-diff-nodes.log)
 
 <img width="700" height="192" alt="image" src="https://github.com/user-attachments/assets/eda7e695-1ae3-4e2e-a704-c9f74e0bda5b" />
 
@@ -380,12 +380,11 @@ P99 ITL (ms):                            108.09
 (APIServer pid=114) INFO 09-03 06:32:21 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 790.2 tokens/s, Running: 72 reqs, Waiting: 25 reqs, GPU KV cache usage: 99.2%, Prefix cache hit rate: 50.9%
 ```
 
-### <a name="toc_3"></a>✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
+#### <a name="toc_3"></a>✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log)
 
 <img width="700" height="409" alt="image" src="https://github.com/user-attachments/assets/e6e42a91-f5a6-406d-8b23-b3dde2c76f21" />
-
 
 ```
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
@@ -910,7 +909,7 @@ P99 ITL (ms):                            230.72
 (APIServer pid=144) INFO 09-03 23:39:32 [loggers.py:123] Engine 000: Avg prompt throughput: 76.7 tokens/s, Avg generation throughput: 5267.1 tokens/s, Running: 256 reqs, Waiting: 197 reqs, GPU KV cache usage: 54.0%, Prefix cache hit rate: 12.7%
 ```
 
-### <a name="toc_4"></a>✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
+#### <a name="toc_4"></a>✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log)
 
