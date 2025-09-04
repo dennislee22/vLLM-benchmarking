@@ -14,12 +14,20 @@ A longer context requires proportionally more VRAM for its KV Cache. This means 
 📈 Input vs. Output (Context Length) Ratio
 For a fixed context length, shifting the ratio from prompt-heavy (e.g., 90% input, 10% output) to generation-heavy (e.g., 10% input, 90% output) massively increases the output token throughput by nearly 3x (from ~810 tok/sec to ~2400 tok/sec in the benchmarks). This is due to the difference between the prefill and decoding stages. Prefill (Input) is a highly parallel computation to process the entire input prompt at once. Decoding (Output) is an iterative process that generates one token at a time. It's less computationally intense but is memory-bandwidth bound. The "Output Token Throughput" metric measures the speed of the decoding stage. When a request has a long output with less input, the high fixed cost of the prefill is amortized over many generated tokens. This makes the average time-per-output-token very low, resulting in a very high tok/sec metric. Conversely, a short output with long input gives the prefill cost little time to be amortized, resulting in a lower tok/sec.
 
-## Platform Requirement
+## <a name="toc_0"></a>Table of Contents
+[//]: # (TOC)
+[1. Platform Requirement](#toc_0)<br>
+[2. Procedure](#toc_1)<br>
+[3. ✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)](#toc_2)<br>
+[4. ✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB))](#toc_3)<br>
+[5. ✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB))](#toc_4)<br>
+
+## <a name="toc_0"></a>Platform Requirement
 ✅ Python 3.11/10
 
 ✅ Cloudera AI (CAI) / Cloudera Machine Learning (CML) 1.5.x
 
-## Procedure
+## <a name="toc_1"></a>Procedure
 
 1. Create a new CAI project with 1G shared memory.
 
@@ -47,7 +55,7 @@ NAME               READY   STATUS    RESTARTS   AGE   IP             NODE       
 ip46y52fijaguyzo   5/5     Running   0          29m   10.254.5.36    worker-20   <none>           <none>
 ```
 
-## ✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
+## <a name="toc_2"></a>✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
 
 - Startup log: [vllm-7B-2gpuA10040GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10040GB-0.5GRAM-same-node.log)
 
@@ -372,7 +380,7 @@ P99 ITL (ms):                            108.09
 ```
 
 
-## ✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
+## <a name="toc_3"></a>✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log)
 
@@ -656,7 +664,6 @@ P99 ITL (ms):                            224.41
 (APIServer pid=2202) INFO 09-03 01:34:09 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2108.4 tokens/s, Running: 55 reqs, Waiting: 42 reqs, GPU KV cache usage: 99.0%, Prefix cache hit rate: 49.1%
 ```
 
-
 ```
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
 --port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
@@ -903,7 +910,7 @@ P99 ITL (ms):                            230.72
 (APIServer pid=144) INFO 09-03 23:39:32 [loggers.py:123] Engine 000: Avg prompt throughput: 76.7 tokens/s, Avg generation throughput: 5267.1 tokens/s, Running: 256 reqs, Waiting: 197 reqs, GPU KV cache usage: 54.0%, Prefix cache hit rate: 12.7%
 ```
 
-### ✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
+### <a name="toc_4"></a>✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log)
 
