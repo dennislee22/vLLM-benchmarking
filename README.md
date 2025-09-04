@@ -14,6 +14,10 @@ A longer context requires proportionally more VRAM for its KV Cache. This means 
 📈 Input vs. Output (Context Length) Ratio
 For a fixed context length, shifting the ratio from prompt-heavy (e.g., 90% input, 10% output) to generation-heavy (e.g., 10% input, 90% output) massively increases the output token throughput by nearly 3x (from ~810 tok/sec to ~2400 tok/sec in the benchmarks). This is due to the difference between the prefill and decoding stages. Prefill (Input) is a highly parallel computation to process the entire input prompt at once. Decoding (Output) is an iterative process that generates one token at a time. It's less computationally intense but is memory-bandwidth bound. The "Output Token Throughput" metric measures the speed of the decoding stage. When a request has a long output with less input, the high fixed cost of the prefill is amortized over many generated tokens. This makes the average time-per-output-token very low, resulting in a very high tok/sec metric. Conversely, a short output with long input gives the prefill cost little time to be amortized, resulting in a lower tok/sec.
 
+**Note:** Superior performance with GPUs on the same node: The configuration with 2 GPUs in the same node consistently and significantly outperforms the setup with 2 GPUs across 2 different nodes. This is likely due to faster inter-GPU communication within a single node (e.g., via NVLink or PCIe) compared to the network latency between different nodes.
+
+<img width="700" height="800" alt="image" src="https://github.com/user-attachments/assets/fc7413d7-88fd-49ef-8945-6faf6155f12b" />
+
 ## <a name="toc_0"></a>Table of Contents
 [//]: # (TOC)
 [1. Platform Requirement](#toc_0)<br>
