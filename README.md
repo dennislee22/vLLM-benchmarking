@@ -1,6 +1,6 @@
 # vLLM Benchmarking
 
-These vLLM benchmarking results utilizes a `Qwen-2 7B-Instruct` model running on 2x NVIDIA A100 (80GB) GPUs using the vLLM inference engine. The key takeaway from the test results is that vLLM's core features, particularly PagedAttention and continuous batching, make the system highly efficient at maximizing GPU utilization. Performance is a dynamic interplay between being compute-bound (limited by the GPU's processing power) and memory-bound (limited by GRAM capacity for the KV Cache).
+These vLLM benchmarking results utilizes a `Qwen-2 7B-Instruct` model running on 2x NVIDIA A100 GPUs using the vLLM inference engine. The key takeaway from the test results is that vLLM's core features, particularly PagedAttention and continuous batching, make the system highly efficient at maximizing GPU utilization. Performance is a dynamic interplay between being compute-bound (limited by the GPU's processing power) and memory-bound (limited by GRAM capacity for the KV Cache).
 
 📈 Concurrent Prompts:
 Increasing concurrent prompts initially leads to a rapid increase in total throughput. The system hits a peak performance around 200 concurrent users (~3700 tok/sec). Beyond this point, throughput gradually declines due to the overhead of managing too many requests (compute gridlock). At low concurrency, the GPU is underutilized. Increasing the batch size allows the GPU to process more data in parallel, hiding memory latency and maximizing compute saturation. Once saturated, adding more requests creates scheduling overhead and contention for resources, leading to diminishing returns and eventually a performance drop.
@@ -47,8 +47,9 @@ NAME               READY   STATUS    RESTARTS   AGE   IP             NODE       
 ip46y52fijaguyzo   5/5     Running   0          29m   10.254.5.36    worker-20   <none>           <none>
 ```
 
-### ✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory: 11.03 GiB)
+## ✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
 
+- Startup log: [vllm-7B-2gpuA10040GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10040GB-0.5GRAM-same-node.log)
 
 <img width="700" height="192" alt="image" src="https://github.com/user-attachments/assets/eda7e695-1ae3-4e2e-a704-c9f74e0bda5b" />
 
@@ -371,8 +372,9 @@ P99 ITL (ms):                            108.09
 ```
 
 
-### ✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory: 12.02 GiB)
+## ✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
 
+- Startup log: [vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log)
 
 <img width="700" height="409" alt="image" src="https://github.com/user-attachments/assets/e6e42a91-f5a6-406d-8b23-b3dde2c76f21" />
 
@@ -901,7 +903,9 @@ P99 ITL (ms):                            230.72
 (APIServer pid=144) INFO 09-03 23:39:32 [loggers.py:123] Engine 000: Avg prompt throughput: 76.7 tokens/s, Avg generation throughput: 5267.1 tokens/s, Running: 256 reqs, Waiting: 197 reqs, GPU KV cache usage: 54.0%, Prefix cache hit rate: 12.7%
 ```
 
-### ✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory: 31.83 GiB)
+### ✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
+
+- Startup log: [vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log)
 
 <img width="700" height="404" alt="image" src="https://github.com/user-attachments/assets/30db9775-e231-4f9b-bf7c-f7c18f7cfecb" />
 
