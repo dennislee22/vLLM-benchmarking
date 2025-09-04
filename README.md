@@ -1054,3 +1054,31 @@ P99 ITL (ms):                            233.31
 (APIServer pid=3761) INFO 09-03 02:28:52 [loggers.py:123] Engine 000: Avg prompt throughput: 8585.7 tokens/s, Avg generation throughput: 1071.0 tokens/s, Running: 228 reqs, Waiting: 670 reqs, GPU KV cache usage: 20.8%, Prefix cache hit rate: 46.8%
 (APIServer pid=3761) INFO 09-03 02:29:02 [loggers.py:123] Engine 000: Avg prompt throughput: 8372.9 tokens/s, Avg generation throughput: 1051.1 tokens/s, Running: 229 reqs, Waiting: 588 reqs, GPU KV cache usage: 21.0%, Prefix cache hit rate: 45.1%
 ```
+
+
+### Test 4: 1 GPU
+
+```
+============ Serving Benchmark Result ============
+Successful requests:                     500       
+Benchmark duration (s):                  231.04    
+Total input tokens:                      510414    
+Total generated tokens:                  501465    
+Request throughput (req/s):              2.16      
+Output token throughput (tok/s):         2170.51   
+Total Token throughput (tok/s):          4379.75   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          95836.65  
+Median TTFT (ms):                        88718.78  
+P99 TTFT (ms):                           199001.09 
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          31.56     
+Median TPOT (ms):                        26.23     
+P99 TPOT (ms):                           49.04     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           30.58     
+Median ITL (ms):                         19.00     
+P99 ITL (ms):                            156.25    
+==================================================
+```
+
