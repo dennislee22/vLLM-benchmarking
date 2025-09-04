@@ -1175,7 +1175,7 @@ P99 ITL (ms):                            233.31
 ```
 
 
-### <a name="toc_5"></a>Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB)
+### <a name="toc_5"></a>✍️ Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB)
 
 - Startup.log: [vllm-7B-1gpuA10080GB-0.25GRAM.log](vllm-7B-1gpuA10080GB-0.25GRAM.log)
 
@@ -1284,7 +1284,7 @@ P99 ITL (ms):                            156.25
 (APIServer pid=1671) INFO 09-04 01:13:24 [loggers.py:123] Engine 000: Avg prompt throughput: 818.7 tokens/s, Avg generation throughput: 3266.4 tokens/s, Running: 58 reqs, Waiting: 10 reqs, GPU KV cache usage: 98.8%, Prefix cache hit rate: 43.9%
 ```
 
-### <a name="toc_6"></a>Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB)
+### <a name="toc_6"></a>✍️ Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB)
 
 - Startup.log: [vllm-7B-1gpuA10080GB-0.5GRAM.log](vllm-7B-1gpuA10080GB-0.5GRAM.log)
 
