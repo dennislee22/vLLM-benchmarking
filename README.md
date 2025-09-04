@@ -1,5 +1,18 @@
 # vLLM Benchmarking
 
+These vLLM benchmarking results utilizes a `Qwen-2 7B-Instruct` model running on 2x NVIDIA A100 (80GB) GPUs using the vLLM inference engine. The key takeaway from the test results is that vLLM's core features, particularly PagedAttention and continuous batching, make the system highly efficient at maximizing GPU utilization. Performance is a dynamic interplay between being compute-bound (limited by the GPU's processing power) and memory-bound (limited by GRAM capacity for the KV Cache).
+
+📈 Concurrent Prompts:
+Increasing concurrent prompts initially leads to a rapid increase in total throughput. The system hits a peak performance around 200 concurrent users (~3700 tok/sec). Beyond this point, throughput gradually declines due to the overhead of managing too many requests (compute gridlock). At low concurrency, the GPU is underutilized. Increasing the batch size allows the GPU to process more data in parallel, hiding memory latency and maximizing compute saturation. Once saturated, adding more requests creates scheduling overhead and contention for resources, leading to diminishing returns and eventually a performance drop.
+
+📈 KV Cache Reservation:
+KV Cache acts as an "enabler" for concurrency. Increasing the KV Cache allows more prompts to be held in GRAM, which in turn allows the system to reach the optimal point on the concurrency curve. However, allocating more KV Cache than is needed to serve the optimal number of concurrent prompts yields no additional throughput. Throughput is capped by the lesser of the compute limit (how many requests the GPU can process efficiently) and the memory limit (how many requests can fit in the KV Cache). If your cache only fits 50 prompts, your throughput is capped at the 50-user performance level, even if 200 users are sending requests. Once you have enough cache to hold 200+ prompts, the bottleneck shifts entirely to compute, and extra GRAM for the cache provides no benefit.
+
+📈 Context Length
+A longer context requires proportionally more VRAM for its KV Cache. This means for a fixed total KV Cache size, fewer requests can be processed concurrently, which can lower throughput if it pushes you below the optimal concurrency level. The initial processing of the prompt (prefill) takes longer for a longer context. 
+
+📈 Input vs. Output (Context Length) Ratio
+For a fixed context length, shifting the ratio from prompt-heavy (e.g., 90% input, 10% output) to generation-heavy (e.g., 10% input, 90% output) massively increases the output token throughput by nearly 3x (from ~810 tok/sec to ~2400 tok/sec in the benchmarks). This is due to the difference between the prefill and decoding stages. Prefill (Input) is a highly parallel computation to process the entire input prompt at once. Decoding (Output) is an iterative process that generates one token at a time. It's less computationally intense but is memory-bandwidth bound. The "Output Token Throughput" metric measures the speed of the decoding stage. When a request has a long output with less input, the high fixed cost of the prefill is amortized over many generated tokens. This makes the average time-per-output-token very low, resulting in a very high tok/sec metric. Conversely, a short output with long input gives the prefill cost little time to be amortized, resulting in a lower tok/sec.
 
 ## Platform Requirement
 ✅ Python 3.11/10
