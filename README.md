@@ -2,7 +2,7 @@
 
 This article details the benchmarking results for the vLLM inference engine using the `Qwen-2 7B-Instruct` model, tested on a system equipped with NVIDIA A100 80GB GPU. These results highlight vLLM’s ability to efficiently utilize GPU resources using PagedAttention and continuous batching techniques. A key focus of the benchmarking is to evaluate how generation throughput performance correlates with the configured KV cache memory capacity. To explore this, the `gpu-memory-utilization` setting was varied to determine whether the relationship between memory allocation and throughput is linear. The tests reveal how performance dynamically shifts between being compute-bound (limited by GPU processing power) and memory-bound (constrained by VRAM/GRAM capacity).
 
-<img width="400" height="460" alt="image" src="https://github.com/user-attachments/assets/a4d52f66-7df1-4443-8c0f-69a79abe4832" />
+<img width="433" height="218" alt="image" src="https://github.com/user-attachments/assets/404e06ba-5c09-4a36-84b2-69b41f326ff4" />
 
 ## <a name="toc_0"></a>Table of Contents
 [//]: # (TOC)
