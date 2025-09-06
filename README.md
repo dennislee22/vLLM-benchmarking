@@ -1,6 +1,6 @@
 # vLLM Benchmarking
 
-This article details the benchmarking results for the vLLM inference engine using the `Qwen-2 7B-Instruct` model, tested on a system equipped with NVIDIA A100 80GB GPU. These results highlight vLLM’s ability to efficiently utilize GPU resources using PagedAttention and continuous batching techniques. A key focus of the benchmarking is to evaluate how generation throughput performance correlates with the configured KV cache memory capacity. To explore this, the gpu-memory-utilization setting was varied to determine whether the relationship between memory allocation and throughput is linear. The tests reveal how performance dynamically shifts between being compute-bound (limited by GPU processing power) and memory-bound (constrained by VRAM/GRAM capacity).
+This article details the benchmarking results for the vLLM inference engine using the `Qwen-2 7B-Instruct` model, tested on a system equipped with NVIDIA A100 80GB GPU. These results highlight vLLM’s ability to efficiently utilize GPU resources using PagedAttention and continuous batching techniques. A key focus of the benchmarking is to evaluate how generation throughput performance correlates with the configured KV cache memory capacity. To explore this, the `gpu-memory-utilization` setting was varied to determine whether the relationship between memory allocation and throughput is linear. The tests reveal how performance dynamically shifts between being compute-bound (limited by GPU processing power) and memory-bound (constrained by VRAM/GRAM capacity).
 
 <img width="400" height="460" alt="image" src="https://github.com/user-attachments/assets/a4d52f66-7df1-4443-8c0f-69a79abe4832" />
 
@@ -18,18 +18,25 @@ This article details the benchmarking results for the vLLM inference engine usin
 ## <a name="toc_0"></a>Performance Criteria
 
 📈 Concurrent Prompts:
-Increasing concurrent prompts initially leads to a rapid increase in total throughput. The system hits a peak performance around 200 concurrent users (~3700 tok/sec). Beyond this point, throughput gradually declines due to the overhead of managing too many requests (compute gridlock). At low concurrency, the GPU is underutilized. Increasing the batch size allows the GPU to process more data in parallel, hiding memory latency and maximizing compute saturation. Once saturated, adding more requests creates scheduling overhead and contention for resources, leading to diminishing returns and eventually a performance drop.
+Increasing concurrent prompts initially leads to a rapid increase in total throughput. The system hits a peak performance at a tipping point. Beyond this point, throughput gradually declines or flat due to the overhead of managing too many requests (compute gridlock). At low concurrency, the GPU is underutilized. Increasing the concurrent prompts/user allows the GPU to process more data in parallel, hiding memory latency and maximizing compute saturation. Once saturated, adding more requests creates scheduling overhead and contention for resources, leading to diminishing returns and eventually a performance drop/flat.
 
 📈 KV Cache Reservation:
-KV Cache acts as an "enabler" for concurrency. Increasing the KV Cache allows more prompts to be held in GRAM, which in turn allows the system to reach the optimal point on the concurrency curve. However, allocating more KV Cache than is needed to serve the optimal number of concurrent prompts yields no additional throughput. Throughput is capped by the lesser of the compute limit (how many requests the GPU can process efficiently) and the memory limit (how many requests can fit in the KV Cache). If your cache only fits 50 prompts, your throughput is capped at the 50-user performance level, even if 200 users are sending requests. Once you have enough cache to hold 200+ prompts, the bottleneck shifts entirely to compute, and extra GRAM for the cache provides no benefit.
+KV Cache acts as an "enabler" for concurrency. Increasing the KV Cache allows more prompts to be held in GRAM, which in turn allows the system to reach the optimal point on the concurrency curve. However, allocating more KV Cache than is needed to serve the optimal number of concurrent prompts yields no additional throughput. Throughput is capped by the lesser of the compute limit (how many requests the GPU can process efficiently) and the memory limit (how many requests can fit in the KV Cache). For example, if your cache only fits 50 prompts, your throughput is capped at the 50-user performance level, even if 200 users are sending requests. Once you have enough cache to hold 200+ prompts, the bottleneck shifts entirely to compute, and extra GRAM for the cache provides no benefit.
+Failing to allocate the minimum required KV cache memory can cause the engine to crash at startup. For example, log below shows a negative available KV cache memory (-0.53 GiB) and an immediate failure to initialize.
 
-📈 Context Length
-A longer context requires proportionally more VRAM for its KV Cache. This means for a fixed total KV Cache size, fewer requests can be processed concurrently, which can lower throughput if it pushes you below the optimal concurrency level. The initial processing of the prompt (prefill) takes longer for a longer context. 
+```
+(EngineCore_0 pid=1321) INFO 09-06 03:10:08 [gpu_worker.py:276] Available KV cache memory: -0.53 GiB
+(EngineCore_0 pid=1321) ERROR 09-06 03:10:08 [core.py:700] EngineCore failed to start.
+```
 
-📈 Input vs. Output (Context Length) Ratio
+📈 Context Length:
+A longer context requires proportionally more GRAM for its KV Cache. This means for a fixed total KV Cache size, fewer requests can be processed concurrently, which can lower throughput if it pushes you below the optimal concurrency level. The initial processing of the prompt (prefill) takes longer for a longer context. 
+
+📈 Input vs. Output (Context Length) Ratio:
 For a fixed context length, shifting the ratio from prompt-heavy (e.g., 90% input, 10% output) to generation-heavy (e.g., 10% input, 90% output) massively increases the output token throughput by nearly 3x (from ~810 tok/sec to ~2400 tok/sec in the benchmarks). This is due to the difference between the prefill and decoding stages. Prefill (Input) is a highly parallel computation to process the entire input prompt at once. Decoding (Output) is an iterative process that generates one token at a time. It's less computationally intense but is memory-bandwidth bound. The "Output Token Throughput" metric measures the speed of the decoding stage. When a request has a long output with less input, the high fixed cost of the prefill is amortized over many generated tokens. This makes the average time-per-output-token very low, resulting in a very high tok/sec metric. Conversely, a short output with long input gives the prefill cost little time to be amortized, resulting in a lower tok/sec.
 
-**Note:** Superior performance with GPUs on the same node: The configuration with 2 GPUs in the same node consistently and significantly outperforms the setup with 2 GPUs across 2 different nodes. This is likely due to faster inter-GPU communication within a single node (e.g., via NVLink or PCIe) compared to the network latency between different nodes.
+📈 Superior Performance with GPUs on the Same Node:
+The configuration with 2 GPUs in the same node consistently and significantly outperforms the setup with 2 GPUs across 2 different nodes. This is likely due to faster inter-GPU communication within a single node (e.g., via NVLink or PCIe) compared to the network latency between different nodes.
 
 <img width="700" height="800" alt="image" src="https://github.com/user-attachments/assets/fc7413d7-88fd-49ef-8945-6faf6155f12b" />
 
@@ -53,6 +60,11 @@ For a fixed context length, shifting the ratio from prompt-heavy (e.g., 90% inpu
 Example:
   ```
   git lfs clone https://huggingface.co/Qwen/Qwen2-7B-Instruct
+  ```
+
+4. Download the vLLM benchmarking tool.
+  ```
+  git clone https://github.com/vllm-project/vllm.git
   ```
 
 #### <a name="toc_3"></a>✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
