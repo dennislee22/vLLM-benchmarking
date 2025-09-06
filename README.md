@@ -1,10 +1,21 @@
 # vLLM Benchmarking
 
-These vLLM benchmarking results utilizes a `Qwen-2 7B-Instruct` model running on 2x NVIDIA A100 GPUs using the vLLM inference engine. The key takeaway from the test results is that vLLM's core features, particularly PagedAttention and continuous batching, make the system highly efficient at maximizing GPU utilization. Performance is a dynamic interplay between being compute-bound (limited by the GPU's processing power) and memory-bound (limited by VRAM/GRAM capacity for the KV Cache). vLLM stores KV cache (gpu-memory-utilization setting) in the GPU memory up to 0.9 (90% of the total capacity). You may allocate lesser percentage with the constrained GPU memory.
+In this blog, I present the benchmarking results for the vLLM inference engine using the `Qwen-2 7B-Instruct` model, tested on a system equipped with NVIDIA A100 80GB GPU. These results highlight vLLM’s ability to efficiently utilize GPU resources using PagedAttention and continuous batching techniques. A key focus of the benchmarking is to evaluate how generation throughput performance correlates with the configured KV cache memory capacity. To explore this, the gpu-memory-utilization setting was varied to determine whether the relationship between memory allocation and throughput is linear. The tests reveal how performance dynamically shifts between being compute-bound (limited by GPU processing power) and memory-bound (constrained by VRAM/GRAM capacity).
 
 <img width="400" height="460" alt="image" src="https://github.com/user-attachments/assets/a4d52f66-7df1-4443-8c0f-69a79abe4832" />
 
-## Performance Criteria
+## <a name="toc_0"></a>Table of Contents
+[//]: # (TOC)
+[1. Performance Criteria](#toc_0)<br>
+[2. Platform Requirement](#toc_1)<br>
+[3. Procedure](#toc_2)<br>
+[4. ✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)](#toc_3)<br>
+[5. ✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB))](#toc_4)<br>
+[6. ✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB))](#toc_5)<br>
+[7. ✍️ Test 4: 1 GPU pod (Available KV cache memory in each GPU: 5.01 GiB))](#toc_6)<br>
+[8. ✍️ Test 5: 1 GPU pod (Available KV cache memory in each GPU: 24.83 GiB))](#toc_7)<br>
+
+## <a name="toc_0"></a>Performance Criteria
 
 📈 Concurrent Prompts:
 Increasing concurrent prompts initially leads to a rapid increase in total throughput. The system hits a peak performance around 200 concurrent users (~3700 tok/sec). Beyond this point, throughput gradually declines due to the overhead of managing too many requests (compute gridlock). At low concurrency, the GPU is underutilized. Increasing the batch size allows the GPU to process more data in parallel, hiding memory latency and maximizing compute saturation. Once saturated, adding more requests creates scheduling overhead and contention for resources, leading to diminishing returns and eventually a performance drop.
@@ -22,22 +33,12 @@ For a fixed context length, shifting the ratio from prompt-heavy (e.g., 90% inpu
 
 <img width="700" height="800" alt="image" src="https://github.com/user-attachments/assets/fc7413d7-88fd-49ef-8945-6faf6155f12b" />
 
-## <a name="toc_0"></a>Table of Contents
-[//]: # (TOC)
-[1. Platform Requirement](#toc_0)<br>
-[2. Procedure](#toc_1)<br>
-[3. ✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)](#toc_2)<br>
-[4. ✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB))](#toc_3)<br>
-[5. ✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB))](#toc_4)<br>
-[6. ✍️ Test 4: 1 GPU pod (Available KV cache memory in each GPU: 5.01 GiB))](#toc_5)<br>
-[7. ✍️ Test 5: 1 GPU pod (Available KV cache memory in each GPU: 24.83 GiB))](#toc_6)<br>
-
-## <a name="toc_0"></a>Platform Requirement
+## <a name="toc_1"></a>Platform Requirement
 ✅ Python 3.11/10
 
 ✅ Cloudera AI (CAI) / Cloudera Machine Learning (CML) 1.5.x
 
-## <a name="toc_1"></a>Procedure
+## <a name="toc_2"></a>Procedure
 
 1. Create a new CAI project with 1G shared memory.
 
@@ -54,7 +55,7 @@ Example:
   git lfs clone https://huggingface.co/Qwen/Qwen2-7B-Instruct
   ```
 
-#### <a name="toc_2"></a>✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
+#### <a name="toc_3"></a>✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
 
 - This setup uses Ray alongside `cml.workers_v1 module`. Please see this script [run-vllm.py](run-vllm.py).
 
@@ -460,7 +461,6 @@ P99 ITL (ms):                            801.79
 (APIServer pid=119) INFO 09-04 05:36:51 [loggers.py:123] Engine 000: Avg prompt throughput: 202.9 tokens/s, Avg generation throughput: 1521.5 tokens/s, Running: 256 reqs, Waiting: 239 reqs, GPU KV cache usage: 69.1%, Prefix cache hit rate: 35.1%
 ```
 
-
 ```
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
 --port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
@@ -496,7 +496,7 @@ P99 ITL (ms):                            808.02
 (APIServer pid=119) INFO 09-04 06:02:28 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1525.7 tokens/s, Running: 234 reqs, Waiting: 237 reqs, GPU KV cache usage: 99.8%, Prefix cache hit rate: 21.2%
 ```
 
-#### <a name="toc_3"></a>✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
+#### <a name="toc_4"></a>✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log)
 
@@ -1025,7 +1025,7 @@ P99 ITL (ms):                            230.72
 (APIServer pid=144) INFO 09-03 23:39:32 [loggers.py:123] Engine 000: Avg prompt throughput: 76.7 tokens/s, Avg generation throughput: 5267.1 tokens/s, Running: 256 reqs, Waiting: 197 reqs, GPU KV cache usage: 54.0%, Prefix cache hit rate: 12.7%
 ```
 
-#### <a name="toc_4"></a>✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
+#### <a name="toc_5"></a>✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log)
 
@@ -1172,7 +1172,7 @@ P99 ITL (ms):                            233.31
 ```
 
 
-### <a name="toc_5"></a>✍️ Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB)
+### <a name="toc_6"></a>✍️ Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB)
 
 - Startup.log: [vllm-7B-1gpuA10080GB-0.25GRAM.log](vllm-7B-1gpuA10080GB-0.25GRAM.log)
 
@@ -1281,7 +1281,7 @@ P99 ITL (ms):                            156.25
 (APIServer pid=1671) INFO 09-04 01:13:24 [loggers.py:123] Engine 000: Avg prompt throughput: 818.7 tokens/s, Avg generation throughput: 3266.4 tokens/s, Running: 58 reqs, Waiting: 10 reqs, GPU KV cache usage: 98.8%, Prefix cache hit rate: 43.9%
 ```
 
-### <a name="toc_6"></a>✍️ Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB)
+### <a name="toc_7"></a>✍️ Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB)
 
 - Startup.log: [vllm-7B-1gpuA10080GB-0.5GRAM.log](vllm-7B-1gpuA10080GB-0.5GRAM.log)
 
