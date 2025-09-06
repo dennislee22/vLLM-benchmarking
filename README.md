@@ -42,7 +42,7 @@ For a fixed context length, shifting the ratio from prompt-heavy (e.g., 90% inpu
 📈 Superior Performance with GPUs on the Same Node:
 The configuration with 2 GPUs in the same node consistently and significantly outperforms the setup with 2 GPUs across 2 different nodes. This is likely due to faster inter-GPU communication within a single node (e.g., via NVLink or PCIe) compared to the network latency between different nodes.
 
-<img width="700" height="800" alt="image" src="https://github.com/user-attachments/assets/fc7413d7-88fd-49ef-8945-6faf6155f12b" />
+<img width="500" height="800" alt="image" src="https://github.com/user-attachments/assets/fc7413d7-88fd-49ef-8945-6faf6155f12b" />
 
 ## <a name="toc_1"></a>Platform Requirement
 ✅ Python 3.11/10
