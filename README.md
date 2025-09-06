@@ -12,8 +12,8 @@ This article details the benchmarking results for the vLLM inference engine usin
 [✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)](#toc_3)<br>
 [✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB))](#toc_4)<br>
 [✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB))](#toc_5)<br>
-[✍️ Test 4: 1 GPU pod (Available KV cache memory in each GPU: 5.01 GiB))](#toc_6)<br>
-[✍️ Test 5: 1 GPU pod (Available KV cache memory in each GPU: 24.83 GiB))](#toc_7)<br>
+[✍️ Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB))](#toc_6)<br>
+[✍️ Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB))](#toc_7)<br>
 
 ## <a name="toc_0"></a>Performance Criteria
 
