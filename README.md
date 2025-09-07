@@ -18,7 +18,7 @@ My GPU Calculator:
 [✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)](#toc_5)<br>
 [✍️ Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB)](#toc_6)<br>
 [✍️ Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB)](#toc_7)<br>
-[✍️ Test 6: 2 GPU pods service 72B model hosted in the same node (Available KV cache memory in each GPU: 6.77 GiB)](#toc_8)<br>
+[✍️ Test 6: 2 GPU pods host 72B model in the same node (Available KV cache memory in each GPU: 6.77 GiB)](#toc_8)<br>
 
 ## <a name="toc_0"></a>Performance Criteria
 
@@ -1822,7 +1822,7 @@ P99 ITL (ms):                            249.71
 (APIServer pid=2739) INFO 09-04 01:43:21 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2958.8 tokens/s, Running: 214 reqs, Waiting: 662 reqs, GPU KV cache usage: 90.7%, Prefix cache hit rate: 30.7%
 ```
 
-### <a name="toc_8"></a>✍️ Test 6: 2 GPU pods service 72B model hosted in the same node (Available KV cache memory in each GPU: 6.77 GiB)
+### <a name="toc_8"></a>✍️ Test 6: 2 GPU pods host 72B model in the same node (Available KV cache memory in each GPU: 6.77 GiB)
 
 ```
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
