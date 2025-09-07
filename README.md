@@ -13,11 +13,11 @@ My GPU Calculator:
 [Performance Criteria](#toc_0)<br>
 [Platform Requirement](#toc_1)<br>
 [Procedure](#toc_2)<br>
-[✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)](#toc_3)<br>
-[✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)](#toc_4)<br>
-[✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)](#toc_5)<br>
-[✍️ Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB)](#toc_6)<br>
-[✍️ Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB)](#toc_7)<br>
+[✍️ Test 1: 2 GPU pods host 7B model in 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)](#toc_3)<br>
+[✍️ Test 2: 2 GPU pods host 7B model in the same node (Available KV cache memory in each GPU: 12.02 GiB)](#toc_4)<br>
+[✍️ Test 3: 2 GPU pods host 7B model in the same node (Available KV cache memory in each GPU: 31.83 GiB)](#toc_5)<br>
+[✍️ Test 4: 1 GPU pod hosts 7B model (Available KV cache memory: 5.01 GiB)](#toc_6)<br>
+[✍️ Test 5: 1 GPU pod hosts 7B model (Available KV cache memory: 24.83 GiB)](#toc_7)<br>
 [✍️ Test 6: 2 GPU pods host 32B model in the same node (Available KV cache memory in each GPU: 8.22 GiB)](#toc_8)<br>
 [✍️ Test 7: 2 GPU pods host 72B model in the same node (Available KV cache memory in each GPU: 6.77 GiB)](#toc_9)<br>
 
