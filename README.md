@@ -73,7 +73,7 @@ Example:
   git clone https://github.com/vllm-project/vllm.git
   ```
 
-#### <a name="toc_3"></a>✍️ Test 1: 2 GPU pods hosted on 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
+#### <a name="toc_3"></a>✍️ Test 1: 2 GPU pods host 7B model in 2 different nodes (Available KV cache memory in each GPU: 11.03 GiB)
 
 - This setup uses Ray alongside `cml.workers_v1 module`. Please see this script [run-vllm.py](run-vllm.py).
 
@@ -514,7 +514,7 @@ P99 ITL (ms):                            808.02
 (APIServer pid=119) INFO 09-04 06:02:28 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1525.7 tokens/s, Running: 234 reqs, Waiting: 237 reqs, GPU KV cache usage: 99.8%, Prefix cache hit rate: 21.2%
 ```
 
-#### <a name="toc_4"></a>✍️ Test 2: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 12.02 GiB)
+#### <a name="toc_4"></a>✍️ Test 2: 2 GPU pods host 7B model in the same node (Available KV cache memory in each GPU: 12.02 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log)
 
@@ -1180,7 +1180,7 @@ P99 ITL (ms):                            230.72
 (APIServer pid=144) INFO 09-03 23:39:32 [loggers.py:123] Engine 000: Avg prompt throughput: 76.7 tokens/s, Avg generation throughput: 5267.1 tokens/s, Running: 256 reqs, Waiting: 197 reqs, GPU KV cache usage: 54.0%, Prefix cache hit rate: 12.7%
 ```
 
-#### <a name="toc_5"></a>✍️ Test 3: 2 GPU pods hosted in the same node (Available KV cache memory in each GPU: 31.83 GiB)
+#### <a name="toc_5"></a>✍️ Test 3: 2 GPU pods host 7B model in the same node (Available KV cache memory in each GPU: 31.83 GiB)
 
 - Startup log: [vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log)
 
@@ -1327,7 +1327,7 @@ P99 ITL (ms):                            233.31
 ```
 
 
-### <a name="toc_6"></a>✍️ Test 4: 1 GPU pod (Available KV cache memory: 5.01 GiB)
+### <a name="toc_6"></a>✍️ Test 4: 1 GPU pod hosts 7B model (Available KV cache memory: 5.01 GiB)
 
 - Startup.log: [vllm-7B-1gpuA10080GB-0.25GRAM.log](vllm-7B-1gpuA10080GB-0.25GRAM.log)
 
@@ -1675,7 +1675,7 @@ P99 ITL (ms):                            159.96
 (APIServer pid=2583) INFO 09-06 21:41:53 [loggers.py:123] Engine 000: Avg prompt throughput: 3268.3 tokens/s, Avg generation throughput: 1152.7 tokens/s, Running: 69 reqs, Waiting: 777 reqs, GPU KV cache usage: 99.1%, Prefix cache hit rate: 40.8%
 ```
 
-### <a name="toc_7"></a>✍️ Test 5: 1 GPU pod (Available KV cache memory: 24.83 GiB)
+### <a name="toc_7"></a>✍️ Test 5: 1 GPU pod hosts 7B model (Available KV cache memory: 24.83 GiB)
 
 - Startup.log: [vllm-7B-1gpuA10080GB-0.5GRAM.log](vllm-7B-1gpuA10080GB-0.5GRAM.log)
 
