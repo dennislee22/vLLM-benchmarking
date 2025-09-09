@@ -1683,6 +1683,179 @@ P99 ITL (ms):                            159.96
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
 --port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
 --host localhost \
+--num-prompts 1` \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     1         
+Benchmark duration (s):                  12.05     
+Total input tokens:                      1024      
+Total generated tokens:                  1024      
+Request throughput (req/s):              0.08      
+Output token throughput (tok/s):         84.95     
+Total Token throughput (tok/s):          169.91    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          36.23     
+Median TTFT (ms):                        36.23     
+P99 TTFT (ms):                           36.23     
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          11.75     
+Median TPOT (ms):                        11.75     
+P99 TPOT (ms):                           11.75     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           11.75     
+Median ITL (ms):                         11.64     
+P99 ITL (ms):                            15.43     
+==================================================
+
+(APIServer pid=136) INFO 09-09 01:43:06 [loggers.py:123] Engine 000: Avg prompt throughput: 58.7 tokens/s, Avg generation throughput: 85.2 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.4%, Prefix cache hit rate: 56.1%
+(APIServer pid=136) INFO 09-09 01:43:16 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 38.8 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 56.1%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
+--host localhost \
+--num-prompts 10 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     10        
+Benchmark duration (s):                  42.85     
+Total input tokens:                      10239     
+Total generated tokens:                  10240     
+Request throughput (req/s):              0.23      
+Output token throughput (tok/s):         238.95    
+Total Token throughput (tok/s):          477.89    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          29715.45  
+Median TTFT (ms):                        29716.24  
+P99 TTFT (ms):                           29727.46  
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          9.62      
+Median TPOT (ms):                        12.78     
+P99 TPOT (ms):                           12.83     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           12.90     
+Median ITL (ms):                         12.81     
+P99 ITL (ms):                            15.94     
+==================================================
+
+(APIServer pid=136) INFO 09-09 01:40:49 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 22.3 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 51.2%
+(APIServer pid=136) INFO 09-09 01:40:59 [loggers.py:123] Engine 000: Avg prompt throughput: 1023.9 tokens/s, Avg generation throughput: 875.7 tokens/s, Running: 6 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.3%, Prefix cache hit rate: 55.4%
+(APIServer pid=136) INFO 09-09 01:41:09 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 148.3 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 55.4%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
+--host localhost \
+--num-prompts 20 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     20        
+Benchmark duration (s):                  14.70     
+Total input tokens:                      20460     
+Total generated tokens:                  20399     
+Request throughput (req/s):              1.36      
+Output token throughput (tok/s):         1387.31   
+Total Token throughput (tok/s):          2778.76   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          195.24    
+Median TTFT (ms):                        199.99    
+P99 TTFT (ms):                           239.46    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          14.12     
+Median TPOT (ms):                        14.12     
+P99 TPOT (ms):                           14.15     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           14.12     
+Median ITL (ms):                         13.97     
+P99 ITL (ms):                            20.04     
+==================================================
+
+(APIServer pid=136) INFO 09-09 01:38:28 [loggers.py:123] Engine 000: Avg prompt throughput: 2045.5 tokens/s, Avg generation throughput: 1046.3 tokens/s, Running: 20 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.6%, Prefix cache hit rate: 50.7%
+(APIServer pid=136) INFO 09-09 01:38:38 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1016.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 50.7%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
+--host localhost \
+--num-prompts 30 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     30        
+Benchmark duration (s):                  15.56     
+Total input tokens:                      30699     
+Total generated tokens:                  30615     
+Request throughput (req/s):              1.93      
+Output token throughput (tok/s):         1967.90   
+Total Token throughput (tok/s):          3941.19   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          241.74    
+Median TTFT (ms):                        240.32    
+P99 TTFT (ms):                           274.05    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          14.93     
+Median TPOT (ms):                        14.93     
+P99 TPOT (ms):                           14.95     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           14.93     
+Median ITL (ms):                         14.80     
+P99 ITL (ms):                            21.42     
+==================================================
+
+(APIServer pid=136) INFO 09-09 01:36:48 [loggers.py:123] Engine 000: Avg prompt throughput: 3069.1 tokens/s, Avg generation throughput: 1175.4 tokens/s, Running: 30 reqs, Waiting: 0 reqs, GPU KV cache usage: 9.1%, Prefix cache hit rate: 38.5%
+(APIServer pid=136) INFO 09-09 01:36:58 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1921.4 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 38.5%
+(APIServer pid=136) INFO 09-09 01:37:08 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 38.5%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
+--host localhost \
+--num-prompts 50 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     50        
+Benchmark duration (s):                  21.70     
+Total input tokens:                      50977     
+Total generated tokens:                  51119     
+Request throughput (req/s):              2.30      
+Output token throughput (tok/s):         2356.12   
+Total Token throughput (tok/s):          4705.70   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          2580.51   
+Median TTFT (ms):                        2490.45   
+P99 TTFT (ms):                           4084.26   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          18.47     
+Median TPOT (ms):                        18.57     
+P99 TPOT (ms):                           19.47     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           18.49     
+Median ITL (ms):                         17.04     
+P99 ITL (ms):                            136.93    
+==================================================
+
+(APIServer pid=136) INFO 09-09 01:31:28 [loggers.py:123] Engine 000: Avg prompt throughput: 1772.9 tokens/s, Avg generation throughput: 657.5 tokens/s, Running: 50 reqs, Waiting: 0 reqs, GPU KV cache usage: 14.9%, Prefix cache hit rate: 1.9%
+(APIServer pid=136) INFO 09-09 01:31:38 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 2863.4 tokens/s, Running: 50 reqs, Waiting: 0 reqs, GPU KV cache usage: 21.1%, Prefix cache hit rate: 1.9%
+(APIServer pid=136) INFO 09-09 01:31:48 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 457.8 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 1.9%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
+--host localhost \
 --num-prompts 100 \
 --random-input-len 1024 \
 --random-output-len 1024
