@@ -516,7 +516,7 @@ P99 ITL (ms):                            808.02
 
 #### <a name="toc_4"></a>✍️ Test 2: 2 GPU pods host 7B model in the same node (Available KV cache memory in each GPU: 12.02 GiB)
 
-- Startup log: [vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log)
+- Startup log: [vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log](log/vllm-7B-2gpuA10080GB-0.25GRAM-same-node.log)
 
 <img width="700" height="409" alt="image" src="https://github.com/user-attachments/assets/e6e42a91-f5a6-406d-8b23-b3dde2c76f21" />
 
@@ -1182,7 +1182,7 @@ P99 ITL (ms):                            230.72
 
 #### <a name="toc_5"></a>✍️ Test 3: 2 GPU pods host 7B model in the same node (Available KV cache memory in each GPU: 31.83 GiB)
 
-- Startup log: [vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log](vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log)
+- Startup log: [vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log](log/vllm-7B-2gpuA10080GB-0.5GRAM-same-node.log)
 
 <img width="700" height="404" alt="image" src="https://github.com/user-attachments/assets/30db9775-e231-4f9b-bf7c-f7c18f7cfecb" />
 
@@ -1329,7 +1329,7 @@ P99 ITL (ms):                            233.31
 
 ### <a name="toc_6"></a>✍️ Test 4: 1 GPU pod hosts 7B model (Available KV cache memory: 5.01 GiB)
 
-- Startup.log: [vllm-7B-1gpuA10080GB-0.25GRAM.log](vllm-7B-1gpuA10080GB-0.25GRAM.log)
+- Startup.log: [vllm-7B-1gpuA10080GB-0.25GRAM.log](log/vllm-7B-1gpuA10080GB-0.25GRAM.log)
 
 ```
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
@@ -1677,7 +1677,7 @@ P99 ITL (ms):                            159.96
 
 ### <a name="toc_7"></a>✍️ Test 5: 1 GPU pod hosts 7B model (Available KV cache memory: 24.83 GiB)
 
-- Startup.log: [vllm-7B-1gpuA10080GB-0.5GRAM.log](vllm-7B-1gpuA10080GB-0.5GRAM.log)
+- Startup.log: [vllm-7B-1gpuA10080GB-0.5GRAM.log](log/vllm-7B-1gpuA10080GB-0.5GRAM.log)
 
 ```
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
