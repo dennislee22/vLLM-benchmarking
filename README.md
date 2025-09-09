@@ -87,7 +87,7 @@ NAME               READY   STATUS    RESTARTS   AGE   IP             NODE       
 5c4bmyq953zzetaj   5/5     Running   0          28m   10.254.6.219   worker-19   <none>           <none>
 ip46y52fijaguyzo   5/5     Running   0          29m   10.254.5.36    worker-20   <none>           <none>
 ```
-- Startup log: [vllm-7B-2gpuA10040GB-0.5GRAM-diff-nodes.log](vllm-7B-2gpuA10040GB-0.5GRAM-diff-nodes.log)
+- Startup log: [vllm-7B-2gpuA10040GB-0.5GRAM-diff-nodes.log](log/vllm-7B-2gpuA10040GB-0.5GRAM-diff-nodes.log)
 
 <img width="700" height="192" alt="image" src="https://github.com/user-attachments/assets/eda7e695-1ae3-4e2e-a704-c9f74e0bda5b" />
 
