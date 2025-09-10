@@ -19,7 +19,8 @@ My GPU Calculator:
 [✍️ Test 4: 1 GPU pod hosts 7B model (Available KV cache memory: 5.01 GiB)](#toc_6)<br>
 [✍️ Test 5: 1 GPU pod hosts 7B model (Available KV cache memory: 24.83 GiB)](#toc_7)<br>
 [✍️ Test 6: 2 GPU pods host 32B model in the same node (Available KV cache memory in each GPU: 8.22 GiB)](#toc_8)<br>
-[✍️ Test 7: 2 GPU pods host 72B model in the same node (Available KV cache memory in each GPU: 6.77 GiB)](#toc_9)<br>
+[✍️ Test 7: 1 GPU pod hosts 32B model (Available KV cache memory: 9.70 GiB)](#toc_9)<br>
+[✍️ Test 8: 2 GPU pods host 72B model in the same node (Available KV cache memory in each GPU: 6.77 GiB)](#toc_10)<br>
 
 ## <a name="toc_0"></a>Performance Criteria
 
@@ -2274,8 +2275,146 @@ P99 ITL (ms):                            640.28
 (APIServer pid=126) INFO 09-07 00:48:07 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 610.6 tokens/s, Running: 32 reqs, Waiting: 66 reqs, GPU KV cache usage: 96.9%, Prefix cache hit rate: 46.9%
 ```
 
+### <a name="toc_9"></a>✍️ Test 7: 1 GPU pod hosts 32B model (Available KV cache memory: 9.70 GiB)
 
-### <a name="toc_9"></a>✍️ Test 7: 2 GPU pods host 72B model in the same node (Available KV cache memory in each GPU: 6.77 GiB)
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2.5-32B --dataset-name random \
+--host localhost \
+--num-prompts 10 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     10        
+Benchmark duration (s):                  54.96     
+Total input tokens:                      10239     
+Total generated tokens:                  10240     
+Request throughput (req/s):              0.18      
+Output token throughput (tok/s):         186.31    
+Total Token throughput (tok/s):          372.60    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          2017.23   
+Median TTFT (ms):                        2187.82   
+P99 TTFT (ms):                           2830.05   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          51.64     
+Median TPOT (ms):                        51.48     
+P99 TPOT (ms):                           53.04     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           51.64     
+Median ITL (ms):                         50.97     
+P99 ITL (ms):                            54.66     
+==================================================
+
+(APIServer pid=133) INFO 09-09 20:52:06 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 196.0 tokens/s, Running: 10 reqs, Waiting: 0 reqs, GPU KV cache usage: 39.9%, Prefix cache hit rate: 8.9%
+(APIServer pid=133) INFO 09-09 20:52:16 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 195.0 tokens/s, Running: 10 reqs, Waiting: 0 reqs, GPU KV cache usage: 44.7%, Prefix cache hit rate: 8.9%
+(APIServer pid=133) INFO 09-09 20:52:26 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 194.0 tokens/s, Running: 10 reqs, Waiting: 0 reqs, GPU KV cache usage: 49.6%, Prefix cache hit rate: 8.9%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2.5-32B --dataset-name random \
+--host localhost \
+--num-prompts 50 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     50        
+Benchmark duration (s):                  160.30    
+Total input tokens:                      50977     
+Total generated tokens:                  51200     
+Request throughput (req/s):              0.31      
+Output token throughput (tok/s):         319.41    
+Total Token throughput (tok/s):          637.42    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          21486.84  
+Median TTFT (ms):                        5747.70   
+P99 TTFT (ms):                           77583.49  
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          79.95     
+Median TPOT (ms):                        64.25     
+P99 TPOT (ms):                           124.67    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           79.95     
+Median ITL (ms):                         55.95     
+P99 ITL (ms):                            612.25    
+==================================================
+
+(APIServer pid=133) INFO 09-09 20:57:36 [loggers.py:123] Engine 000: Avg prompt throughput: 1841.1 tokens/s, Avg generation throughput: 21.2 tokens/s, Running: 19 reqs, Waiting: 31 reqs, GPU KV cache usage: 49.2%, Prefix cache hit rate: 35.0%
+(APIServer pid=133) INFO 09-09 20:57:46 [loggers.py:123] Engine 000: Avg prompt throughput: 2042.5 tokens/s, Avg generation throughput: 305.5 tokens/s, Running: 35 reqs, Waiting: 15 reqs, GPU KV cache usage: 98.3%, Prefix cache hit rate: 38.0%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2.5-32B --dataset-name random \
+--host localhost \
+--num-prompts 75 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     75        
+Benchmark duration (s):                  226.03    
+Total input tokens:                      76558     
+Total generated tokens:                  76800     
+Request throughput (req/s):              0.33      
+Output token throughput (tok/s):         339.77    
+Total Token throughput (tok/s):          678.47    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          61850.53  
+Median TTFT (ms):                        10445.43  
+P99 TTFT (ms):                           150225.82 
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          76.73     
+Median TPOT (ms):                        66.38     
+P99 TPOT (ms):                           130.54    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           76.73     
+Median ITL (ms):                         55.91     
+P99 ITL (ms):                            619.24    
+==================================================
+
+(APIServer pid=133) INFO 09-09 21:03:56 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 411.0 tokens/s, Running: 21 reqs, Waiting: 54 reqs, GPU KV cache usage: 95.5%, Prefix cache hit rate: 48.3%
+(APIServer pid=133) INFO 09-09 21:04:06 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 364.4 tokens/s, Running: 20 reqs, Waiting: 55 reqs, GPU KV cache usage: 99.8%, Prefix cache hit rate: 48.2%
+```
+
+```
+python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
+--port 8081 --endpoint='/v1/completions' --model Qwen2.5-32B --dataset-name random \
+--host localhost \
+--num-prompts 100 \
+--random-input-len 1024 \
+--random-output-len 1024
+
+============ Serving Benchmark Result ============
+Successful requests:                     100       
+Benchmark duration (s):                  282.30    
+Total input tokens:                      102140    
+Total generated tokens:                  102400    
+Request throughput (req/s):              0.35      
+Output token throughput (tok/s):         362.73    
+Total Token throughput (tok/s):          724.55    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          97867.77  
+Median TTFT (ms):                        98670.42  
+P99 TTFT (ms):                           223160.11 
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          77.73     
+Median TPOT (ms):                        69.39     
+P99 TPOT (ms):                           129.68    
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           77.74     
+Median ITL (ms):                         55.94     
+P99 ITL (ms):                            623.64    
+==================================================
+
+(APIServer pid=1358) INFO 09-09 21:23:33 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 469.3 tokens/s, Running: 25 reqs, Waiting: 75 reqs, GPU KV cache usage: 99.4%, Prefix cache hit rate: 46.6%
+(APIServer pid=1358) INFO 09-09 21:23:43 [loggers.py:123] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 421.6 tokens/s, Running: 22 reqs, Waiting: 78 reqs, GPU KV cache usage: 97.4%, Prefix cache hit rate: 48.0%
+```
+
+### <a name="toc_10"></a>✍️ Test 8: 2 GPU pods host 72B model in the same node (Available KV cache memory in each GPU: 6.77 GiB)
 
 <img width="700" height="404" alt="image" src="https://github.com/user-attachments/assets/87c5c3a3-92fa-473c-ae1e-f68c49c8c723" />
 
