@@ -6,7 +6,7 @@ This article details the benchmarking results for the vLLM inference engine usin
 
 My GPU Calculator:
 
-<img width="600" height="362" alt="image" src="https://github.com/user-attachments/assets/f10e573c-d4d3-436e-9049-db214e3093d5" />
+<img width="700" height="389" alt="image" src="https://github.com/user-attachments/assets/3a2dd5d0-c195-446b-8056-235e58966f63" />
 
 ## <a name="toc_0"></a>Table of Contents
 [//]: # (TOC)
