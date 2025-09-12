@@ -29,6 +29,9 @@ Increasing concurrent prompts initially leads to a rapid increase in total throu
 
 📈 KV Cache Reservation:
 KV Cache acts as an "enabler" for concurrency. Increasing the KV Cache allows more prompts to be held in GRAM, which in turn allows the system to reach the optimal point on the concurrency curve. However, allocating more KV Cache than is needed to serve the optimal number of concurrent prompts yields no additional throughput. Throughput is capped by the lesser of the compute limit (how many requests the GPU can process efficiently) and the memory limit (how many requests can fit in the KV Cache). For example, if your cache only fits 50 prompts, your throughput is capped at the 50-user performance level, even if 200 users are sending requests. Once you have enough cache to hold 200+ prompts, the bottleneck shifts entirely to compute, and extra GRAM for the cache provides no benefit.
+
+<img width="400" height="313" alt="image" src="https://github.com/user-attachments/assets/18a290e1-b968-45d9-ad41-6d59e2deb1b9" />
+
 Failing to allocate the minimum required KV cache memory can cause the engine to crash at startup. For example, log below shows a negative available KV cache memory (-0.53 GiB) and an immediate failure to initialize.
 
 ```
@@ -1684,7 +1687,7 @@ P99 ITL (ms):                            159.96
 python /home/cdsw/vllm/benchmarks/benchmark_serving.py --backend vllm \
 --port 8081 --endpoint='/v1/completions' --model Qwen2-7B-Instruct --dataset-name random \
 --host localhost \
---num-prompts 1` \
+--num-prompts 1 \
 --random-input-len 1024 \
 --random-output-len 1024
 
